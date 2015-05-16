@@ -8,6 +8,8 @@ package edu.mum.os.lab1.utils;
 import java.io.File;
 
 public class Common {
+	
+  static public String ALGO_PKG_TEMPLATE = "edu.mum.os.lab1.algos.%sScheduler";
 
   static public int s2i (String s) {
     int i = 0;
@@ -66,7 +68,7 @@ public class Common {
 		throw new Exception("Usage: 'java Scheduling <Algorithm> <conf. filename>' Eg. 'java Scheduling FCFS scheduling.conf");
 	}
 	
-	String algo = args[0] + "Scheduler";
+	String algo = getSchedulerCanonicalName(args[0]);
 	try {
 		Class.forName(algo);
 	} catch (ClassNotFoundException e) {
@@ -83,5 +85,9 @@ public class Common {
 		throw new Exception("Scheduling: error, read of " + f.getName()
 				+ " failed.");
 	}
+  }
+  
+  static public String getSchedulerCanonicalName(String shortName) {
+	  return String.format(ALGO_PKG_TEMPLATE, shortName);
   }
 }

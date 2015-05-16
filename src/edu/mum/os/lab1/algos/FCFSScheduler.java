@@ -5,10 +5,9 @@ package edu.mum.os.lab1.algos;
  * Referenced base code at: http://www.ontko.com/moss
  */
 
+import java.io.FileNotFoundException;
 import java.util.Vector;
-import java.io.*;
 
-import edu.mum.os.lab1.beans.Context;
 import edu.mum.os.lab1.beans.Process;
 
 
@@ -17,8 +16,8 @@ public class FCFSScheduler extends Scheduler {
 	private static final String SCHEDULING_TYPE = "Batch (Nonpreemptive)";
 	private static final String SCHEDULING_NAME = "First-Come First-Served";
 
-	public FCFSScheduler(Context context) throws FileNotFoundException {
-		super(SCHEDULING_TYPE, SCHEDULING_NAME, context);
+	public FCFSScheduler() {
+		super(SCHEDULING_TYPE, SCHEDULING_NAME);
 	}
 
 	public void execute() throws FileNotFoundException {

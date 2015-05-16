@@ -2,21 +2,24 @@ package edu.mum.os.lab1;
 
 import java.io.FileNotFoundException;
 
-import edu.mum.os.lab1.algos.FCFSScheduler;
 import edu.mum.os.lab1.algos.Scheduler;
 import edu.mum.os.lab1.beans.Context;
 import edu.mum.os.lab1.utils.Common;
 import edu.mum.os.lab1.utils.Parser;
 
-public class Test {
+public class Execute {
 
 	public static void main(String[] args) throws FileNotFoundException {
 		try {
 			Common.validateArgs(args);
 
-			String conf = args[0];
+			String algo = Common.getSchedulerCanonicalName(args[0]);
+			String conf = args[1];
 			Context context = Parser.getContext(conf);
-			Scheduler algorithm = new FCFSScheduler(context);
+			
+			Scheduler algorithm = (Scheduler)(Class.forName(algo).newInstance());
+			algorithm.inject(context);
+			
 			algorithm.execute();
 			algorithm.printResult();
 			algorithm.printGanttChart();

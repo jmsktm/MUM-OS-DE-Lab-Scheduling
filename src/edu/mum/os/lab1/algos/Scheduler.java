@@ -42,26 +42,30 @@ abstract public class Scheduler {
 	private static final String GANTT_RESULT = "PROCESS #%3s : %s";
 	
 	public Scheduler(String schedulingType,
-			String schedulingName, Context context)
-			throws FileNotFoundException {
+			String schedulingName) {
 		this.schedulingType = schedulingType;
 		this.schedulingName = schedulingName;
-		this.context = context;
-
-		String folderName = OUTPURDIR + File.separator + schedulingName
-				+ File.separator + schedulingType + File.separator
-				+ "PROCESSCOUNT-" + context.getProcesses().size();
-		File folder = new File(folderName);
-		folder.mkdirs();		
+	}
+	
+	public void inject(Context context) {
+		try {
+			this.context = context;
+			String folderName = OUTPURDIR + File.separator + schedulingName
+					+ File.separator + schedulingType + File.separator
+					+ "PROCESSCOUNT-" + context.getProcesses().size();
+			File folder = new File(folderName);
+			folder.mkdirs();		
 		
-		FileOutputStream sfos = new FileOutputStream(folder + File.separator + SUMMARYFILE);
-		ss = new PrintStream(sfos);
-		
-		FileOutputStream rfos = new FileOutputStream(folder + File.separator + RESULTFILE);
-		rs = new PrintStream(rfos);
-		
-		FileOutputStream gfos = new FileOutputStream(folder + File.separator + GANTTCHART);
-		gc = new PrintStream(gfos);
+			FileOutputStream sfos = new FileOutputStream(folder + File.separator + SUMMARYFILE);
+			ss = new PrintStream(sfos);
+			
+			FileOutputStream rfos = new FileOutputStream(folder + File.separator + RESULTFILE);
+			rs = new PrintStream(rfos);
+			
+			FileOutputStream gfos = new FileOutputStream(folder + File.separator + GANTTCHART);
+			gc = new PrintStream(gfos);
+		} catch (FileNotFoundException e) {
+		}
 	}
 
 	abstract public void execute() throws FileNotFoundException;
