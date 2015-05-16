@@ -1,4 +1,9 @@
-package com.ontko.moss.utils;
+package edu.mum.os.lab1.utils;
+
+/**
+ * @author James Singh
+ * Referenced base code at: http://www.ontko.com/moss
+ */
 
 import java.io.DataInputStream;
 import java.io.File;
@@ -6,8 +11,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.StringTokenizer;
 
-import com.ontko.moss.beans.Context;
-import com.ontko.moss.beans.Process;
+import edu.mum.os.lab1.beans.Context;
+import edu.mum.os.lab1.beans.Process;
 
 public class Parser {
 

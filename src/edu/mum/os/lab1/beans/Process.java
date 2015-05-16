@@ -1,4 +1,9 @@
-package com.ontko.moss.beans;
+package edu.mum.os.lab1.beans;
+
+/**
+ * @author James Singh
+ * Referenced base code at: http://www.ontko.com/moss
+ */
 
 public class Process {
 	

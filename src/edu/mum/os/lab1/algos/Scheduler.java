@@ -1,14 +1,17 @@
-package com.ontko.moss.algos;
+package edu.mum.os.lab1.algos;
+
+/**
+ * @author James Singh
+ * Referenced base code at: http://www.ontko.com/moss
+ */
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
-import java.util.HashMap;
-import java.util.Map;
 
-import com.ontko.moss.beans.Context;
-import com.ontko.moss.beans.Process;
+import edu.mum.os.lab1.beans.Context;
+import edu.mum.os.lab1.beans.Process;
 
 abstract public class Scheduler {
 
@@ -49,8 +52,7 @@ abstract public class Scheduler {
 				+ File.separator + schedulingType + File.separator
 				+ "PROCESSCOUNT-" + context.getProcesses().size();
 		File folder = new File(folderName);
-		folder.mkdirs();
-		
+		folder.mkdirs();		
 		
 		FileOutputStream sfos = new FileOutputStream(folder + File.separator + SUMMARYFILE);
 		ss = new PrintStream(sfos);

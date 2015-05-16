@@ -1,4 +1,4 @@
-package com.ontko.moss.algos;
+package edu.mum.os.lab1.algos;
 
 /**
  * @author James Singh
@@ -8,8 +8,8 @@ package com.ontko.moss.algos;
 import java.util.Vector;
 import java.io.*;
 
-import com.ontko.moss.beans.Context;
-import com.ontko.moss.beans.Process;
+import edu.mum.os.lab1.beans.Context;
+import edu.mum.os.lab1.beans.Process;
 
 
 public class FCFSScheduler extends Scheduler {

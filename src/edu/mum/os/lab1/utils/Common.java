@@ -1,4 +1,9 @@
-package com.ontko.moss.utils;
+package edu.mum.os.lab1.utils;
+
+/**
+ * @author James Singh
+ * Referenced base code at: http://www.ontko.com/moss
+ */
 
 import java.io.File;
 
@@ -57,10 +62,19 @@ public class Common {
   }
   
   static public void validateArgs(String args[]) throws Exception {
-	if (args.length != 1) {
-		throw new Exception("Usage: 'java Scheduling <INIT FILE>'");
+	if (args.length != 2) {
+		throw new Exception("Usage: 'java Scheduling <Algorithm> <conf. filename>' Eg. 'java Scheduling FCFS scheduling.conf");
 	}
-	File f = new File(args[0]);
+	
+	String algo = args[0] + "Scheduler";
+	try {
+		Class.forName(algo);
+	} catch (ClassNotFoundException e) {
+		throw new Exception(String.format("No algorithm by name '%s'", algo));
+	}
+	
+	
+	File f = new File(args[1]);
 	if (!(f.exists())) {
 		throw new Exception("Scheduling: error, file '" + f.getName()
 				+ "' does not exist.");

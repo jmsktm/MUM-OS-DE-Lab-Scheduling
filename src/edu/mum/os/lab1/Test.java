@@ -1,12 +1,12 @@
-package com.ontko.moss;
+package edu.mum.os.lab1;
 
 import java.io.FileNotFoundException;
 
-import com.ontko.moss.algos.FCFSScheduler;
-import com.ontko.moss.algos.Scheduler;
-import com.ontko.moss.beans.Context;
-import com.ontko.moss.utils.Common;
-import com.ontko.moss.utils.Parser;
+import edu.mum.os.lab1.algos.FCFSScheduler;
+import edu.mum.os.lab1.algos.Scheduler;
+import edu.mum.os.lab1.beans.Context;
+import edu.mum.os.lab1.utils.Common;
+import edu.mum.os.lab1.utils.Parser;
 
 public class Test {
 
