@@ -12,12 +12,12 @@ import com.ontko.moss.beans.Context;
 import com.ontko.moss.beans.Process;
 
 
-public class FCFSSchedulingAlgorithm extends SchedulingAlgorithm {
+public class FCFSScheduler extends Scheduler {
 
 	private static final String SCHEDULING_TYPE = "Batch (Nonpreemptive)";
 	private static final String SCHEDULING_NAME = "First-Come First-Served";
 
-	public FCFSSchedulingAlgorithm(Context context) throws FileNotFoundException {
+	public FCFSScheduler(Context context) throws FileNotFoundException {
 		super(SCHEDULING_TYPE, SCHEDULING_NAME, context);
 	}
 
@@ -63,11 +63,16 @@ public class FCFSSchedulingAlgorithm extends SchedulingAlgorithm {
 						.elementAt(currentProcess);
 				registered(currentProcess, process);
 			}
+			this.schedule(process);
 			process.cpudone++;
 			if (process.ioblocking > 0) {
 				process.ionext++;
 			}
 			comptime++;
 		}
+	}
+	
+	public Process getNextProcess() {
+		return null;
 	}
 }

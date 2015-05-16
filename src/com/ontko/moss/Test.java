@@ -2,8 +2,8 @@ package com.ontko.moss;
 
 import java.io.FileNotFoundException;
 
-import com.ontko.moss.algos.FCFSSchedulingAlgorithm;
-import com.ontko.moss.algos.SchedulingAlgorithm;
+import com.ontko.moss.algos.FCFSScheduler;
+import com.ontko.moss.algos.Scheduler;
 import com.ontko.moss.beans.Context;
 import com.ontko.moss.utils.Common;
 import com.ontko.moss.utils.Parser;
@@ -16,9 +16,10 @@ public class Test {
 
 			String conf = args[0];
 			Context context = Parser.getContext(conf);
-			SchedulingAlgorithm algorithm = new FCFSSchedulingAlgorithm(context);
+			Scheduler algorithm = new FCFSScheduler(context);
 			algorithm.execute();
 			algorithm.printResult();
+			algorithm.printGanttChart();
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(0);
