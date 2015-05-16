@@ -6,8 +6,8 @@ Mean: 30
 Standard Deviation: 0
 
 Process#   CPU Time (ms)   IO Blocking (ms)  CPU Completed (ms)  CPU Blocked (ms) 
-1          30              2                 30                  14               
-2          30              4                 30                  7                
-3          30              6                 30                  4                
-4          30              8                 30                  3                
-5          30              10                380                 37               
+1          30              8                 30                  3                
+2          30              2                 30                  14               
+3          30              12                30                  2                
+4          30              4                 30                  7                
+5          30              6                 380                 63               

@@ -1,10 +1,5 @@
 package edu.mum.os.lab1.utils;
 
-/**
- * @author James Singh
- * Referenced base code at: http://www.ontko.com/moss
- */
-
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -63,8 +58,9 @@ public class Parser {
 				}
 				X = X * stdDev;
 				cputime = (int) X + meanDev;
-				context.getProcesses().addElement(
-						new Process(count, cputime, ioblocking, 0, 0, 0));
+				Process process = new Process(count, cputime, ioblocking, 0, 0, 0);
+				process.setContext(context);
+				context.getProcesses().addElement(process);
 				count++;
 			}
 			if (line.startsWith("runtime")) {

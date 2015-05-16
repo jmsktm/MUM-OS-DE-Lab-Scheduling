@@ -1,10 +1,5 @@
 package edu.mum.os.lab1.algos;
 
-/**
- * @author James Singh
- * Referenced base code at: http://www.ontko.com/moss
- */
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -71,12 +66,9 @@ abstract public class Scheduler {
 	abstract public void execute() throws FileNotFoundException;
 	
 	public void schedule(Process process) {
+		context.tick();
 		for (Process proc : this.getContext().getProcesses()) {
-			if (proc == process) {
-				proc.execute();
-			} else {
-				proc.idle();
-			}
+			proc.tick(proc == process);
 		}
 	}
 

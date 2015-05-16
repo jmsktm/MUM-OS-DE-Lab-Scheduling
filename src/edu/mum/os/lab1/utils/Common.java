@@ -1,10 +1,5 @@
 package edu.mum.os.lab1.utils;
 
-/**
- * @author James Singh
- * Referenced base code at: http://www.ontko.com/moss
- */
-
 import java.io.File;
 
 public class Common {

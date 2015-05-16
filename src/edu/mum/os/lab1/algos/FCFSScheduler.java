@@ -1,10 +1,5 @@
 package edu.mum.os.lab1.algos;
 
-/**
- * @author James Singh
- * Referenced base code at: http://www.ontko.com/moss
- */
-
 import java.io.FileNotFoundException;
 import java.util.Vector;
 

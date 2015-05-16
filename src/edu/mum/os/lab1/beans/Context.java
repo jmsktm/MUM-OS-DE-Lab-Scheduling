@@ -1,20 +1,17 @@
 package edu.mum.os.lab1.beans;
 
-/**
- * @author James Singh
- * Referenced base code at: http://www.ontko.com/moss
- */
-
 import java.util.Vector;
 
 public class Context {
+	
+	private Vector<Process> processes = new Vector<Process>();
 	
 	private int numprocess;
 	private int meanDev;
 	private int standardDev;
 	private int runtime;
 	
-	private Vector<Process> processes = new Vector<Process>();
+	private int tick;
 	
 	public int getNumprocess() {
 		return numprocess;
@@ -45,5 +42,11 @@ public class Context {
 	}
 	public void addProcess(Process process) {
 		this.processes.add(process);
+	}
+	public void tick() {
+		this.tick++;
+	}
+	public int tickCount() {
+		return this.tick;
 	}
 }
