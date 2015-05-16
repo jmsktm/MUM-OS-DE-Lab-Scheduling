@@ -1,4 +1,7 @@
-package com.ontko.moss;
+package com.ontko.moss.utils;
+
+import java.io.File;
+
 public class Common {
 
   static public int s2i (String s) {
@@ -52,6 +55,19 @@ public class Common {
       return false;
     }
   }
-
+  
+  static public void validateArgs(String args[]) throws Exception {
+	if (args.length != 1) {
+		throw new Exception("Usage: 'java Scheduling <INIT FILE>'");
+	}
+	File f = new File(args[0]);
+	if (!(f.exists())) {
+		throw new Exception("Scheduling: error, file '" + f.getName()
+				+ "' does not exist.");
+	}
+	if (!(f.canRead())) {
+		throw new Exception("Scheduling: error, read of " + f.getName()
+				+ " failed.");
+	}
+  }
 }
-
