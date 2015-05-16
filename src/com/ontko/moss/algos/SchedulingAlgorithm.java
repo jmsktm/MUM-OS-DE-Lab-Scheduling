@@ -1,5 +1,6 @@
 package com.ontko.moss.algos;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -16,45 +17,101 @@ abstract public class SchedulingAlgorithm {
 	private String schedulingType;
 	@SuppressWarnings("unused")
 	private String schedulingName;
-	@SuppressWarnings("unused")
 	private Vector<sProcess> processes;
+	private Results result;
 
-	private PrintStream out = null;
-	public final String REGISTERED 	= "Process: %s registered    %4s %4s %4s %4s";
-	public final String COMPLETED 	= "Process: %s completed     %4s %4s %4s %4s";
-	public final String BLOCKED 	= "Process: %s registered    %4s %4s %4s %4s";
+	public void setResults(Results result) {
+		this.result = result;
+	}
+
+	private PrintStream ss = null;
+	private PrintStream rs = null;
+
+	private static final String OUTPURDIR	= "output";
+	private static final String SUMMARYFILE = "Summary-Processes";
+	private static final String RESULTFILE = "Summary-Results";
 	
-	public SchedulingAlgorithm(String fileName, String schedulingType,
+	private static final String REGISTERED 	= "Process %s registered    %4s %4s %4s %4s";
+	private static final String COMPLETED 	= "Process %s completed     %4s %4s %4s %4s";
+	private static final String BLOCKED 	= "Process %s registered    %4s %4s %4s %4s";
+	
+	public SchedulingAlgorithm(String schedulingType,
 			String schedulingName, Vector<sProcess> processes)
 			throws FileNotFoundException {
-		this.fileName = fileName;
 		this.schedulingType = schedulingType;
 		this.schedulingName = schedulingName;
 
-		FileOutputStream fos = new FileOutputStream(fileName);
-		out = new PrintStream(fos);
+		String folderName = OUTPURDIR + File.separator + schedulingName
+				+ File.separator + schedulingType + File.separator
+				+ "PROCESSCOUNT-" + processes.size();
+		File folder = new File(folderName);
+		folder.mkdirs();
+		
+		FileOutputStream sfos = new FileOutputStream(folder + File.separator + SUMMARYFILE);
+		ss = new PrintStream(sfos);
+		
+		FileOutputStream rfos = new FileOutputStream(folder + File.separator + RESULTFILE);
+		rs = new PrintStream(rfos);
 	}
 
-	abstract public Results run() throws FileNotFoundException;
+	abstract public void execute() throws FileNotFoundException;
 
 	public void registered(int currentProcess, sProcess process)
 			throws FileNotFoundException {
-		print(currentProcess, process, REGISTERED);
+		printSummary(currentProcess, process, REGISTERED);
 	}
 
 	public void completed(int currentProcess, sProcess process)
 			throws FileNotFoundException {
-		print(currentProcess, process, COMPLETED);
+		printSummary(currentProcess, process, COMPLETED);
 	}
 
 	public void blocked(int currentProcess, sProcess process)
 			throws FileNotFoundException {
-		print(currentProcess, process, BLOCKED);
+		printSummary(currentProcess, process, BLOCKED);
 	}
 
-	private void print(int currentProcess, sProcess process, String template)
+	private void printSummary(int currentProcess, sProcess process, String template)
 			throws FileNotFoundException {
-		out.println(String.format(template, currentProcess, process.cputime,
+		ss.println(String.format(template, currentProcess, process.cputime,
 				process.ioblocking, process.cpudone, process.cpudone));
+	}
+	
+	protected void printResult() {
+		rs.println("Scheduling Type: " + result.schedulingType);
+		rs.println("Scheduling Name: " + result.schedulingName);
+		rs.println("Simulation Run Time: " + result.compuTime);
+		rs.println("Mean: meanDev");
+		rs.println("Standard Deviation: standardDev");
+		rs.println("Process #\tCPU Time\tIO Blocking\tCPU Completed\tCPU Blocked");
+		for (int i = 0; i < processes.size(); i++) {
+			sProcess process = (sProcess) processes.elementAt(i);
+			rs.print(Integer.toString(i));
+			if (i < 100) {
+				rs.print("\t\t");
+			} else {
+				rs.print("\t");
+			}
+			rs.print(Integer.toString(process.cputime));
+			if (process.cputime < 100) {
+				rs.print(" (ms)\t\t");
+			} else {
+				rs.print(" (ms)\t");
+			}
+			rs.print(Integer.toString(process.ioblocking));
+			if (process.ioblocking < 100) {
+				rs.print(" (ms)\t\t");
+			} else {
+				rs.print(" (ms)\t");
+			}
+			rs.print(Integer.toString(process.cpudone));
+			if (process.cpudone < 100) {
+				rs.print(" (ms)\t\t");
+			} else {
+				rs.print(" (ms)\t");
+			}
+			rs.println(process.numblocked + " times");
+		}
+		rs.close();
 	}
 }

@@ -100,46 +100,7 @@ public class Sched {
 		}
 		
 		SchedulingAlgorithm algorithm = new FCFSSchedulingAlgorithm(runtime, processVector);
-		Results result = algorithm.run();
-		try {
-			PrintStream out = new PrintStream(new FileOutputStream(resultsFile));
-			out.println("Scheduling Type: " + result.schedulingType);
-			out.println("Scheduling Name: " + result.schedulingName);
-			out.println("Simulation Run Time: " + result.compuTime);
-			out.println("Mean: " + meanDev);
-			out.println("Standard Deviation: " + standardDev);
-			out.println("Process #\tCPU Time\tIO Blocking\tCPU Completed\tCPU Blocked");
-			for (i = 0; i < processVector.size(); i++) {
-				sProcess process = (sProcess) processVector.elementAt(i);
-				out.print(Integer.toString(i));
-				if (i < 100) {
-					out.print("\t\t");
-				} else {
-					out.print("\t");
-				}
-				out.print(Integer.toString(process.cputime));
-				if (process.cputime < 100) {
-					out.print(" (ms)\t\t");
-				} else {
-					out.print(" (ms)\t");
-				}
-				out.print(Integer.toString(process.ioblocking));
-				if (process.ioblocking < 100) {
-					out.print(" (ms)\t\t");
-				} else {
-					out.print(" (ms)\t");
-				}
-				out.print(Integer.toString(process.cpudone));
-				if (process.cpudone < 100) {
-					out.print(" (ms)\t\t");
-				} else {
-					out.print(" (ms)\t");
-				}
-				out.println(process.numblocked + " times");
-			}
-			out.close();
-		} catch (IOException e) { /* Handle exceptions */
-		}
+		algorithm.execute();
 		System.out.println("Completed.");
 	}
 }

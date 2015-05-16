@@ -13,7 +13,6 @@ import com.ontko.moss.algos.SchedulingAlgorithm;
 
 public class FCFSSchedulingAlgorithm extends SchedulingAlgorithm {
 
-	private static final String FILENAME = "Summary-Processes";
 	private static final String SCHEDULING_TYPE = "Batch (Nonpreemptive)";
 	private static final String SCHEDULING_NAME = "First-Come First-Served";
 
@@ -22,12 +21,12 @@ public class FCFSSchedulingAlgorithm extends SchedulingAlgorithm {
 
 	public FCFSSchedulingAlgorithm(int execTotal, Vector<sProcess> processes)
 			throws FileNotFoundException {
-		super(FILENAME, SCHEDULING_TYPE, SCHEDULING_NAME, processes);
+		super(SCHEDULING_TYPE, SCHEDULING_NAME, processes);
 		this.execTotal = execTotal;
 		this.processes = processes;
 	}
 
-	public Results run() throws FileNotFoundException {
+	public void execute() throws FileNotFoundException {
 		Results result = new Results(SCHEDULING_TYPE, SCHEDULING_NAME, execTotal);
 		
 		int i = 0;
@@ -37,8 +36,7 @@ public class FCFSSchedulingAlgorithm extends SchedulingAlgorithm {
 		int size = processes.size();
 		int completed = 0;
 
-		sProcess process = (sProcess) processes
-				.elementAt(currentProcess);
+		sProcess process = (sProcess) processes.elementAt(currentProcess);
 		registered(currentProcess, process);
 		while (comptime < execTotal) {
 			if (process.cpudone == process.cputime) {
@@ -46,7 +44,7 @@ public class FCFSSchedulingAlgorithm extends SchedulingAlgorithm {
 				completed(currentProcess, process);
 				if (completed == size) {
 					result.compuTime = comptime;
-					return result;
+					setResults(result);
 				}
 				for (i = size - 1; i >= 0; i--) {
 					process = (sProcess) processes.elementAt(i);
@@ -82,6 +80,6 @@ public class FCFSSchedulingAlgorithm extends SchedulingAlgorithm {
 		}
 			
 		result.compuTime = comptime;
-		return result;
+		setResults(result);
 	}
 }
