@@ -31,7 +31,23 @@ public class Process {
 			cpuUtil.append(IDLE);
 			return;
 		}
-		cpuUtil.append(EXECUTING);
+		this.preExecute();
+		this.execute();
+		this.postExecute();
+	}
+	
+	public void preExecute() {
+		this.cpuUtil.append(EXECUTING);
+		this.cpudone++;
+		this.ionext++;
+	}
+	
+	public void execute() {
+		System.out.println("***** PROCESS " + this.id + " *****");
+	}
+	
+	public void postExecute() {
+		
 	}
 	
 	public String getCpuUtil() {

@@ -46,7 +46,7 @@ public class Context {
 	public void tick() {
 		this.tick++;
 	}
-	public int tickCount() {
+	public int getTick() {
 		return this.tick;
 	}
 }

@@ -3,6 +3,7 @@ package edu.mum.os.lab1.algos;
 import java.io.FileNotFoundException;
 import java.util.Vector;
 
+import edu.mum.os.lab1.beans.Context;
 import edu.mum.os.lab1.beans.Process;
 
 
@@ -15,58 +16,26 @@ public class FCFSScheduler extends Scheduler {
 		super(SCHEDULING_TYPE, SCHEDULING_NAME);
 	}
 
-	public void execute() throws FileNotFoundException {
+	public void execute() throws FileNotFoundException {		
+		Context context = this.getContext();
+		Vector<Process> processes = context.getProcesses();
 		
-		Vector<Process> processes = this.getContext().getProcesses();
-		int execTotal = this.getContext().getRuntime();
-		
-		int i = 0;
-		int comptime = 0;
-		int currentProcess = 0;
-		int previousProcess = 0;
-		int size = processes.size();
-
-		Process process = (Process) processes.elementAt(currentProcess);
-		registered(currentProcess, process);
-		while (comptime < execTotal) {
-			if (process.cpudone == process.cputime) {
-				completed(currentProcess, process);
-				for (i = size - 1; i >= 0; i--) {
-					process = (Process) processes.elementAt(i);
-					if (process.cpudone < process.cputime) {
-						currentProcess = i;
-					}
+		int previous = -1;
+		boolean complete = false;
+		while (context.getTick() < context.getRuntime() && !complete) {
+			for (int current = 0; current < processes.size(); current++) {
+				if (context.getTick() == context.getRuntime()) break;
+				if (previous == current) continue;
+				Process process = processes.get(current);
+				if (process.cpudone < process.cputime) {
+					this.schedule(process);
+					previous = current;
+					break;
+				} else if (previous == (processes.size() - 1)) {
+					complete = true;
+					break;
 				}
-				process = (Process) processes
-						.elementAt(currentProcess);
-				registered(currentProcess, process);
 			}
-			if (process.ioblocking == process.ionext) {
-				blocked(currentProcess, process);
-				process.numblocked++;
-				process.ionext = 0;
-				previousProcess = currentProcess;
-				for (i = size - 1; i >= 0; i--) {
-					process = (Process) processes.elementAt(i);
-					if (process.cpudone < process.cputime
-							&& previousProcess != i) {
-						currentProcess = i;
-					}
-				}
-				process = (Process) processes
-						.elementAt(currentProcess);
-				registered(currentProcess, process);
-			}
-			this.schedule(process);
-			process.cpudone++;
-			if (process.ioblocking > 0) {
-				process.ionext++;
-			}
-			comptime++;
 		}
-	}
-	
-	public Process getNextProcess() {
-		return null;
 	}
 }
