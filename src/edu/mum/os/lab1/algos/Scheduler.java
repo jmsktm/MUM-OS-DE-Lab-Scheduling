@@ -42,7 +42,7 @@ abstract public class Scheduler {
 		this.schedulingName = schedulingName;
 	}
 	
-	public void inject(Context context) {
+	public void setContext(Context context) {
 		try {
 			this.context = context;
 			String folderName = OUTPURDIR + File.separator + schedulingName
@@ -65,31 +65,41 @@ abstract public class Scheduler {
 
 	abstract public void execute() throws FileNotFoundException;
 	
-	public void schedule(Process process) {
-		context.tick();
-		for (Process proc : this.getContext().getProcesses()) {
-			proc.tick(proc == process);
+	public void schedule(Process process) throws FileNotFoundException {
+		while (context.getTick() < context.getRuntime()
+				&& process.cpudone < process.cputime 
+				&& process.ionext < process.ioblocking) {
+			if (process.cpudone == 0) registered(process);
+			context.tick();
+			for (Process proc : this.getContext().getProcesses()) {
+				proc.tick(proc == process);
+			}
+			if (process.cpudone == process.cputime) {
+				completed(process);
+			}
+		}
+		if (process.ionext == process.ioblocking) {
+			process.ionext = 0;
+			process.numblocked++;
+			blocked(process);
 		}
 	}
 
-	public void registered(int currentProcess, Process process)
-			throws FileNotFoundException {
-		printSummary(currentProcess, process, REGISTERED);
+	public void registered(Process process) throws FileNotFoundException {
+		printSummary(process, REGISTERED);
 	}
 
-	public void completed(int currentProcess, Process process)
-			throws FileNotFoundException {
-		printSummary(currentProcess, process, COMPLETED);
+	public void completed(Process process) throws FileNotFoundException {
+		printSummary(process, COMPLETED);
 	}
 
-	public void blocked(int currentProcess, Process process)
-			throws FileNotFoundException {
-		printSummary(currentProcess, process, BLOCKED);
+	public void blocked(Process process) throws FileNotFoundException {
+		printSummary(process, BLOCKED);
 	}
 
-	private void printSummary(int currentProcess, Process process, String template)
+	private void printSummary(Process process, String template)
 			throws FileNotFoundException {
-		String text = String.format(template, currentProcess, process.cputime,
+		String text = String.format(template, process.id, process.cputime,
 				process.ioblocking, process.cpudone, process.cpudone);
 		ss.println(text);
 		System.out.println(text);
@@ -101,7 +111,7 @@ abstract public class Scheduler {
 		Context context = this.getContext();
 		sb.append("\nScheduling Name: " + this.schedulingName);
 		sb.append("\nScheduling Type: " + this.schedulingType);
-		sb.append("\nSimulation Run Time: " + context.getRuntime());
+		sb.append("\nSimulation Run Time: " + context.getTick());
 		sb.append("\nMean: " + context.getMeanDev());
 		sb.append("\nStandard Deviation: " + context.getStandardDev() + "\n\n");
 		

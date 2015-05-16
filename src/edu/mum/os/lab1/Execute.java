@@ -18,7 +18,7 @@ public class Execute {
 			Context context = Parser.getContext(conf);
 			
 			Scheduler algorithm = (Scheduler)(Class.forName(algo).newInstance());
-			algorithm.inject(context);
+			algorithm.setContext(context);
 			
 			algorithm.execute();
 			algorithm.printResult();

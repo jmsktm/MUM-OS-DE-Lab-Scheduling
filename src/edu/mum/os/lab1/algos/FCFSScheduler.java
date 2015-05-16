@@ -3,6 +3,7 @@ package edu.mum.os.lab1.algos;
 import java.io.FileNotFoundException;
 import java.util.Vector;
 
+import edu.mum.os.lab1.beans.Context;
 import edu.mum.os.lab1.beans.Process;
 
 
@@ -15,10 +16,19 @@ public class FCFSScheduler extends Scheduler {
 		super(SCHEDULING_TYPE, SCHEDULING_NAME);
 	}
 
-	public void execute() throws FileNotFoundException {
+	public void execute() throws FileNotFoundException {		
+		Context context = this.getContext();
+		Vector<Process> processes = context.getProcesses();
 		
-		Vector<Process> processes = this.getContext().getProcesses();
-		int execTotal = this.getContext().getRuntime();
+		while (context.getTick() < context.getRuntime()) {
+			for (Process process : processes) {
+				if (process.cpudone < process.cputime) {
+					this.schedule(process);
+					break;
+				}
+			}
+		}
+		/*int execTotal = this.getContext().getRuntime();
 		
 		int i = 0;
 		int comptime = 0;
@@ -26,6 +36,7 @@ public class FCFSScheduler extends Scheduler {
 		int previousProcess = 0;
 		int size = processes.size();
 
+		@SuppressWarnings("unused")
 		Process process = (Process) processes.elementAt(currentProcess);
 		registered(currentProcess, process);
 		while (comptime < execTotal) {
@@ -63,7 +74,7 @@ public class FCFSScheduler extends Scheduler {
 				process.ionext++;
 			}
 			comptime++;
-		}
+		}*/
 	}
 	
 	public Process getNextProcess() {
