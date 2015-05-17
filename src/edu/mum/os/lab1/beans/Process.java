@@ -43,7 +43,7 @@ public class Process {
 	}
 	
 	public void execute() {
-		System.out.println("***** PROCESS " + this.id + " *****");
+		// process execution
 	}
 	
 	public void postExecute() {
