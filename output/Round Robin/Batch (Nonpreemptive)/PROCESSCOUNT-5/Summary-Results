@@ -1,0 +1,14 @@
+
+Scheduling Name: Round Robin
+Scheduling Type: Batch (Nonpreemptive)
+Scheduled Run Time: 300
+Simulation Run Time: 150
+Mean: 30
+Standard Deviation: 0
+
+Process#   CPU Time (ms)   IO Blocking (ms)  CPU Completed (ms)  CPU Blocked (ms) 
+1          30              8                 30                  3                
+2          30              2                 30                  15               
+3          30              12                30                  2                
+4          30              4                 30                  7                
+5          30              6                 30                  5                
