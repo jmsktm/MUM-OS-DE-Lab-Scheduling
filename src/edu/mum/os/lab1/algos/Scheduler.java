@@ -21,11 +21,11 @@ abstract public class Scheduler {
 	private static final String OUTPURDIR	= "output";
 	private static final String SUMMARYFILE = "Summary-Processes";
 	private static final String RESULTFILE 	= "Summary-Results";
-	private static final String GANTTCHART 	= "Gantt-Chart";
+	private static final String GANTTFILE 	= "Gantt-Chart";
 	
-	private static final String REGISTERED 	= "PROCESS %-3s REGISTERED    %4s %4s %4s %4s";
-	private static final String COMPLETED 	= "PROCESS %-3s COMPLETED     %4s %4s %4s %4s";
-	private static final String BLOCKED 	= "PROCESS %-3s BLOCKED       %4s %4s %4s %4s";
+	private static final String REGISTERED 	= "PROCESS %-3s REGISTERED    %4s %4s %4s";
+	private static final String COMPLETED 	= "PROCESS %-3s COMPLETED     %4s %4s %4s";
+	private static final String BLOCKED 	= "PROCESS %-3s BLOCKED       %4s %4s %4s";
 	
 	private static final String PROCESSNUM 	= "Process#";
 	private static final String CPUTIME 	= "CPU Time (ms)";
@@ -35,6 +35,8 @@ abstract public class Scheduler {
 	
 	private static final String RESULT = "%-10s %-15s %-17s %-19s %-17s";
 	private static final String GANTT_RESULT = "PROCESS #%3s : %s";
+
+	private File folder = null;
 	
 	public Scheduler(String schedulingType,
 			String schedulingName) {
@@ -42,25 +44,23 @@ abstract public class Scheduler {
 		this.schedulingName = schedulingName;
 	}
 	
-	public void setContext(Context context) {
-		try {
-			this.context = context;
-			String folderName = OUTPURDIR + File.separator + schedulingName
-					+ File.separator + schedulingType + File.separator
-					+ "PROCESSCOUNT-" + context.getProcesses().size();
-			File folder = new File(folderName);
-			folder.mkdirs();		
+	public void setContext(Context context) throws FileNotFoundException {
+		this.context = context;
+		String folderName = OUTPURDIR + File.separator + schedulingName
+				+ File.separator + schedulingType + File.separator
+				+ "PROCESSCOUNT-" + context.getProcesses().size();
+		folder = new File(folderName);
+		folder.mkdirs();
 		
-			FileOutputStream sfos = new FileOutputStream(folder + File.separator + SUMMARYFILE);
-			ss = new PrintStream(sfos);
-			
-			FileOutputStream rfos = new FileOutputStream(folder + File.separator + RESULTFILE);
-			rs = new PrintStream(rfos);
-			
-			FileOutputStream gfos = new FileOutputStream(folder + File.separator + GANTTCHART);
-			gc = new PrintStream(gfos);
-		} catch (FileNotFoundException e) {
-		}
+	
+		FileOutputStream sfos = new FileOutputStream(getSummaryFile());
+		ss = new PrintStream(sfos);
+		
+		FileOutputStream rfos = new FileOutputStream(getResultFile());
+		rs = new PrintStream(rfos);
+		
+		FileOutputStream gfos = new FileOutputStream(getGanttFile());
+		gc = new PrintStream(gfos);
 	}
 
 	abstract public void execute() throws FileNotFoundException;
@@ -70,7 +70,6 @@ abstract public class Scheduler {
 				&& process.cpudone < process.cputime 
 				&& process.ionext < process.ioblocking) {
 			if (process.cpudone == 0) registered(process);
-			context.tick();
 			for (Process proc : this.getContext().getProcesses()) {
 				proc.tick(proc == process);
 			}
@@ -100,10 +99,9 @@ abstract public class Scheduler {
 	private void printSummary(Process process, String template)
 			throws FileNotFoundException {
 		String text = String.format(template, process.id, process.cputime,
-				process.ioblocking, process.cpudone, process.cpudone);
+				process.ioblocking, process.cpudone);
 		ss.println(text);
 		System.out.println(text);
-		ss.close();
 	}
 	
 	public void printResult() {
@@ -124,7 +122,6 @@ abstract public class Scheduler {
 					process.ioblocking, process.cpudone, process.numblocked));
 		}
 		String text = sb.toString();
-		System.out.println(text);
 		rs.println(text);
 		rs.close();
 	}
@@ -138,5 +135,21 @@ abstract public class Scheduler {
 	
 	public Context getContext() {
 		return this.context;
+	}
+	
+	public File getRootFolder() {
+		return folder;
+	}
+	
+	public File getSummaryFile() {
+		return new File(folder + File.separator + SUMMARYFILE);
+	}
+	
+	public File getResultFile() {
+		return new File(folder + File.separator + RESULTFILE);
+	}
+	
+	public File getGanttFile() {
+		return new File(folder + File.separator + GANTTFILE);
 	}
 }

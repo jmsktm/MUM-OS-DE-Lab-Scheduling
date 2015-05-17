@@ -22,7 +22,7 @@ public class FCFSScheduler extends Scheduler {
 		
 		int previous = -1;
 		boolean complete = false;
-		while (context.getTick() < context.getRuntime() || !complete) {
+		while (context.getTick() < context.getRuntime() && !complete) {
 			for (int current = 0; current < processes.size(); current++) {
 				if (context.getTick() == context.getRuntime()) break;
 				if (previous == current) continue;

@@ -43,6 +43,7 @@ public class Process {
 	}
 	
 	public void execute() {
+		context.tick();
 		// process execution
 	}
 	
